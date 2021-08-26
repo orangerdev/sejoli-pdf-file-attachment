@@ -45,7 +45,8 @@ class Product {
 	 * @return array
 	 */
 	public function setup_pdf_file_attachment_setting_fields(array $fields) {
-		$fields[]   = array(
+		
+        $fields[]   = array(
             'title'     => __('PDF', 'sejoli-pdf-file-attachment'),
             'fields'    => array(
                 Field::make( 'separator', 'sep_pdf_attachment' , __('PDF File Attachment', 'sejoli-pdf-file-attachment'))
@@ -63,6 +64,7 @@ class Product {
         );
 
         return $fields;
-	}
+	
+    }
 
 }
