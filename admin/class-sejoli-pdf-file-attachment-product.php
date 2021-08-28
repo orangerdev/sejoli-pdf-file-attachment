@@ -53,7 +53,7 @@ class Product {
                     ->set_classes('sejoli-with-help')
                     ->set_help_text('<a href="' . sejolisa_get_admin_help('shipping') . '" class="thickbox sejoli-help">Tutorial <span class="dashicons dashicons-video-alt2"></span></a>'),
 
-                Field::make('checkbox', 'pdf_file_pembayaran_dikonfirmasi', __('Attach PDF Invoice - Email Pembayaran di Konfirmasi', 'sejoli-pdf-file-attachment'))
+                Field::make('checkbox', 'pdf_file_menunggu_pembayaran', __('Attach PDF Invoice - Email Menunggu Pembayaran', 'sejoli-pdf-file-attachment'))
                     ->set_option_value('yes')
                     ->set_default_value(false),
 

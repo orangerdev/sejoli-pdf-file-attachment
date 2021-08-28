@@ -122,6 +122,7 @@ class Sejoli_Pdf_File_Attachment {
 		 */
 		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-admin.php';
 		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-product.php';
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-invoice.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -167,6 +168,13 @@ class Sejoli_Pdf_File_Attachment {
 		$product = new Sejoli_Pdf_File_Attachment\Admin\Product( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_filter( 'sejoli/product/fields', $product, 'setup_pdf_file_attachment_setting_fields', 97);
+
+		$invoice = new Sejoli_Pdf_File_Attachment\Admin\Invoice( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'sejoli/order/set-status/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
+		$this->loader->add_action( 'sejoli/notification/order/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
+		$this->loader->add_action( 'sejoli/order/set-status/completed', $invoice, 'generate_invoice_data_order_completed', 300);
+		$this->loader->add_action( 'sejoli/notification/order/completed', $invoice, 'generate_invoice_data_order_completed', 300);
 
 	}
 
