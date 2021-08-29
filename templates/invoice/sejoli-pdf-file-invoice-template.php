@@ -109,17 +109,15 @@
 						<table>
 							<tr>
 								<td class="title">
-								<?php
-							        $upload_logo = carbon_get_theme_option('notification_email_logo');
-
-							        if($upload_logo) :
-							            $image = wp_get_attachment_image_src($upload_logo, 'medium');
-							            if($image) :
-							                echo '<img src="'.$image[0].'" alt="'.get_bloginfo('name').'" style="width: 100%; max-width: 150px" />';
-							            endif;
-							        endif;
-								?>
-									
+									<?php
+								        $upload_logo = carbon_get_theme_option('notification_email_logo');
+								        if($upload_logo) :
+								            $image = wp_get_attachment_image_src($upload_logo, 'medium');
+								            if($image) :
+								                echo '<img src="'.$image[0].'" alt="'.get_bloginfo('name').'" style="width: 100%; max-width: 150px" />';
+								            endif;
+								        endif;
+									?>		
 								</td>
 
 								<td>
@@ -139,6 +137,7 @@
 						</table>
 					</td>
 				</tr>
+				
 				<?php
 					$shipper_origin_id   = $response['product']->shipping['origin'];
 					$shipper_origin_city = $this->get_subdistrict_detail($shipper_origin_id);

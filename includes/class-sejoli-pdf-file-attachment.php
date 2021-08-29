@@ -171,6 +171,9 @@ class Sejoli_Pdf_File_Attachment {
 
 		$invoice = new Sejoli_Pdf_File_Attachment\Admin\Invoice( $this->get_plugin_name(), $this->get_version() );
 
+		// $this->loader->add_filter( 'sejoli/product/meta-data', $invoice, 'setup_product_pdf_file_data', 10);
+		$this->loader->add_filter( 'sejoli/notification/email/attachments', $invoice, 'set_pdf_email_attachments', 10, 2);
+		// $this->loader->add_filter( 'sejoli/notification/email/attachments', $invoice, 'set_pdf_email_attachments_completed', 10, 2);
 		$this->loader->add_action( 'sejoli/order/set-status/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
 		$this->loader->add_action( 'sejoli/notification/order/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
 		$this->loader->add_action( 'sejoli/order/set-status/completed', $invoice, 'generate_invoice_data_order_completed', 300);
