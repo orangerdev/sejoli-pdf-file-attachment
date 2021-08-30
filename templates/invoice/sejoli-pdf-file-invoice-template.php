@@ -137,7 +137,7 @@
 						</table>
 					</td>
 				</tr>
-				
+
 				<?php
 					$shipper_origin_id   = $response['product']->shipping['origin'];
 					$shipper_origin_city = $this->get_subdistrict_detail($shipper_origin_id);
@@ -160,13 +160,25 @@
 				<tr class="heading">
 					<td><?php _e('Metode Pembayaran', 'sejoli-pdf-file-attachment'); ?></td>
 					<td>&nbsp;</td>
-					<td><?php _e('Informasi Akun', 'sejoli-pdf-file-attachment'); ?></td>
+					<td>
+					<?php 
+						if( $response['payment_gateway'] === 'manual' ): 
+							_e('Informasi Akun', 'sejoli-pdf-file-attachment');
+						else:
+							echo '&nbsp;';
+						endif;
+					?>
+					</td>
 				</tr>
 
 				<tr class="details">
 					<td><?php echo ucfirst($response['payment_gateway']); ?></td>
 					<td>&nbsp;</td>
-					<td><?php echo $response['payment_info']['bank'].' - '.$response['payment_info']['account_number'].'<br /> (a/n. '.$response['payment_info']['owner'].')'; ?></td>
+					<?php if( $response['payment_gateway'] === 'manual' ): ?>
+						<td><?php echo $response['payment_info']['bank'].' - '.$response['payment_info']['account_number'].'<br /> (a/n. '.$response['payment_info']['owner'].')'; ?></td>
+					<?php else: ?>
+						<td>&nbsp;</td>
+					<?php endif; ?>
 				</tr>
 
 				<tr class="heading">
@@ -179,9 +191,11 @@
 					<td>
 						<?php echo $response['product']->post_title; ?><br />
 						<?php 
+						if(isset($response['meta_data']['variants'])){
 							foreach ($response['meta_data']['variants'] as $variants):
 								echo $variants['type'] .' : '. $variants['label']. '<br />';
 				        	endforeach;
+				        }
 				        ?>
 					</td>
 					<td><?php echo $response['quantity']; ?></td>
