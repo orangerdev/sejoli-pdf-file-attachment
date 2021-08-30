@@ -122,14 +122,14 @@
 
 								<td>
 									<?php
-										$status = $response['status'];
+										$status = $response['orders'][0]->status;
 										if($status === 'on-hold'){
 											$status_label = 'Menunggu Pembayaran';
 										} else {
 											$status_label = 'Pesanan Selesai';
 										}
 									?>
-									<b><?php echo __('INV #', 'sejoli-pdf-file-attachment').$response['ID'].' - '.$status_label; ?></b><br />
+									<b><?php echo __('INV #', 'sejoli-pdf-file-attachment').$response['orders'][0]->ID.' - '.$status_label; ?></b><br />
 									<?php echo __('Tanggal Dibuat: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?><br />
 									<?php echo __('Tanggal Jatuh Tempo: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?>
 								</td>
@@ -139,18 +139,32 @@
 				</tr>
 
 				<?php
-					$shipper_origin_id   = $response['product']->shipping['origin'];
+				if(isset($response['orders'][0]->meta_data['shipping_data'])) {	
+					$shipper_origin_id   = $response['orders'][0]->meta_data['shipping_data']['district_id'];
 					$shipper_origin_city = $this->get_subdistrict_detail($shipper_origin_id);
+				}
 				?>
 				<tr class="information">
 					<td colspan="3">
 						<table>
 							<tr>
 								<td>
-									<?php echo get_bloginfo('name'); ?><br />
+								<?php 
+									if(isset($response['orders'][0]->meta_data['shipping_data'])) {	
+										echo $response['orders'][0]->meta_data['shipping_data']['receiver']; 
+									} else {
+										echo $response['orders'][0]->user_name;
+									}	
+								?>
 								</td>
 								<td>
-									<?php echo $shipper_origin_city['type'].' '.$shipper_origin_city['city'].', '.$shipper_origin_city['subdistrict_name'].', '.$shipper_origin_city['province']; ?>
+								<?php 
+									if(isset($response['orders'][0]->meta_data['shipping_data'])) {	
+										echo $shipper_origin_city['type'].' '.$shipper_origin_city['city'].', '.$shipper_origin_city['subdistrict_name'].', '.$shipper_origin_city['province'];
+									} else {
+										echo $response['orders'][0]->user_email;
+									}
+								?>
 								</td>
 							</tr>
 						</table>
@@ -162,7 +176,7 @@
 					<td>&nbsp;</td>
 					<td>
 					<?php 
-						if( $response['payment_gateway'] === 'manual' ): 
+						if( $response['orders'][0]->payment_gateway === 'manual' ): 
 							_e('Informasi Akun', 'sejoli-pdf-file-attachment');
 						else:
 							echo '&nbsp;';
@@ -172,10 +186,10 @@
 				</tr>
 
 				<tr class="details">
-					<td><?php echo ucfirst($response['payment_gateway']); ?></td>
+					<td><?php echo ucfirst($response['orders'][0]->payment_gateway); ?></td>
 					<td>&nbsp;</td>
-					<?php if( $response['payment_gateway'] === 'manual' ): ?>
-						<td><?php echo $response['payment_info']['bank'].' - '.$response['payment_info']['account_number'].'<br /> (a/n. '.$response['payment_info']['owner'].')'; ?></td>
+					<?php if( $response['orders'][0]->payment_gateway === 'manual' ): ?>
+						<td><?php echo $response['orders'][0]->payment_info['bank'].' - '.$response['orders'][0]->payment_info['account_number'].'<br /> (a/n. '.$response['orders'][0]->payment_info['owner'].')'; ?></td>
 					<?php else: ?>
 						<td>&nbsp;</td>
 					<?php endif; ?>
@@ -189,23 +203,23 @@
 
 				<tr class="item">
 					<td>
-						<?php echo $response['product']->post_title; ?><br />
+						<?php echo $response['orders'][0]->product->post_title; ?><br />
 						<?php 
-						if(isset($response['meta_data']['variants'])){
-							foreach ($response['meta_data']['variants'] as $variants):
+						if(isset($response['orders'][0]->meta_data['variants'])){
+							foreach ($response['orders'][0]->meta_data['variants'] as $variants):
 								echo $variants['type'] .' : '. $variants['label']. '<br />';
 				        	endforeach;
 				        }
 				        ?>
 					</td>
-					<td><?php echo $response['quantity']; ?></td>
-					<td><?php echo sejolisa_price_format($response['grand_total']); ?></td>
+					<td><?php echo $response['orders'][0]->quantity; ?></td>
+					<td><?php echo sejolisa_price_format($response['orders'][0]->grand_total); ?></td>
 				</tr>
 
 				<tr class="total">
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td><b><?php echo __('TOTAL', 'sejoli-pdf-file-attachment').' : '.sejolisa_price_format($response['grand_total']); ?></b></td>
+					<td><b><?php echo __('TOTAL', 'sejoli-pdf-file-attachment').' : '.sejolisa_price_format($response['orders'][0]->grand_total); ?></b></td>
 				</tr>
 			</table>
 		</div>

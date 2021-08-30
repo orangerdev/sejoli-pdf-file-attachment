@@ -132,8 +132,25 @@ class Invoice {
      */
     public function generate_invoice_data_order_on_hold( array $order_data ){
         
-        $response = $order_data;
-        $pdf_file_menunggu_pembayaran = carbon_get_post_meta( $response['product_id'], 'pdf_file_menunggu_pembayaran' );
+        // $response = $order_data;
+        $response = sejolisa_get_orders(['ID' => $order_data['ID'] ]);
+        
+        require_once ( SEJOLISA_DIR . 'payments/main.php' );
+        require_once ( SEJOLISA_DIR . 'payments/manual.php' );
+
+        $payments['manual'] = new \SejoliSA\Payment\Manual();
+
+        $this->payments = apply_filters('sejoli/payment/available-libraries', $payments);
+
+        $used_module = $response['orders'][0]->payment_gateway;
+
+        if( isset($this->payments[$used_module]) ) :
+
+            $response['orders'][0]->payment_info = $this->payments[$used_module]->set_payment_info($order_data);
+
+        endif;
+
+        $pdf_file_menunggu_pembayaran = carbon_get_post_meta( $response['orders'][0]->product_id, 'pdf_file_menunggu_pembayaran' );
 
         if( true === boolval( $pdf_file_menunggu_pembayaran ) ) :
 
@@ -141,8 +158,7 @@ class Invoice {
             require_once( SEJOLISA_DIR . 'notification/on-hold.php' );
 
             $this->libraries = [
-                'on-hold' => new \SejoliSA\Notification\OnHold,
-                'main'    => new \SejoliSA\Notification\Main
+                'on-hold' => new \SejoliSA\Notification\OnHold
             ];
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
@@ -162,7 +178,7 @@ class Invoice {
                 $output = $dompdf->output();
 
                 wp_mkdir_p( SEJOLI_PDF_UPLOAD_DIR );
-                $file_name = 'INV-'.$response['ID'].'-'.$response['status'].'-'.date("Y-m-d").'.pdf';
+                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'-'.date("Y-m-d").'.pdf';
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
@@ -185,11 +201,28 @@ class Invoice {
      * @return  pdf file attachment
      */
     public function generate_invoice_data_order_completed( array $order_data ){
-        
-        $response = $order_data;
-        $pdf_file_pesanan_selesai = carbon_get_post_meta( $response['product_id'], 'pdf_file_pesanan_selesai' );
 
-        if( true === boolval( $pdf_file_pesanan_selesai) ) :
+        // $response = $order_data;
+        $response = sejolisa_get_orders(['ID' => $order_data['ID'] ]);
+
+        require_once ( SEJOLISA_DIR . 'payments/main.php' );
+        require_once ( SEJOLISA_DIR . 'payments/manual.php' );
+
+        $payments['manual'] = new \SejoliSA\Payment\Manual();
+
+        $this->payments = apply_filters('sejoli/payment/available-libraries', $payments);
+
+        $used_module = $response['orders'][0]->payment_gateway;
+
+        if( isset($this->payments[$used_module]) ) :
+
+            $response['orders'][0]->payment_info = $this->payments[$used_module]->set_payment_info($order_data);
+
+        endif;
+
+        $pdf_file_pesanan_selesai = carbon_get_post_meta( $response['orders'][0]->product_id, 'pdf_file_pesanan_selesai' );
+
+        if( true === boolval( $pdf_file_pesanan_selesai ) ) :
 
             require_once( SEJOLISA_DIR . 'notification/main.php' );
             require_once( SEJOLISA_DIR . 'notification/completed.php' );
@@ -215,11 +248,11 @@ class Invoice {
                 $output = $dompdf->output();
 
                 wp_mkdir_p( SEJOLI_PDF_UPLOAD_DIR );
-                $file_name = 'INV-'.$response['ID'].'-'.$response['status'].'-'.date("Y-m-d").'.pdf';
+                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'-'.date("Y-m-d").'.pdf';
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
-     
+
                 return wp_send_json( $invoice_url );
 
             endif;
