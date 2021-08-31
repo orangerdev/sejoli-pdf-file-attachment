@@ -109,29 +109,29 @@
 						<table>
 							<tr>
 								<td class="title">
-									<?php
-								        $upload_logo = carbon_get_theme_option('notification_email_logo');
-								        if($upload_logo) :
-								            $image = wp_get_attachment_image_src($upload_logo, 'medium');
-								            if($image) :
-								                echo '<img src="'.$image[0].'" alt="'.get_bloginfo('name').'" style="width: 100%; max-width: 150px" />';
-								            endif;
-								        endif;
-									?>		
+								<?php
+							        $upload_logo = carbon_get_theme_option('notification_email_logo');
+							        if($upload_logo) :
+							            $image = wp_get_attachment_image_src($upload_logo, 'medium');
+							            if($image) :
+							                echo '<img src="'.$image[0].'" alt="'.get_bloginfo('name').'" style="width: 100%; max-width: 150px" />';
+							            endif;
+							        endif;
+								?>		
 								</td>
 
 								<td>
-									<?php
-										$status = $response['orders'][0]->status;
-										if($status === 'on-hold'){
-											$status_label = 'Menunggu Pembayaran';
-										} else {
-											$status_label = 'Pesanan Selesai';
-										}
-									?>
-									<b><?php echo __('INV #', 'sejoli-pdf-file-attachment').$response['orders'][0]->ID.' - '.$status_label; ?></b><br />
-									<?php echo __('Tanggal Dibuat: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?><br />
-									<?php echo __('Tanggal Jatuh Tempo: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?>
+								<?php
+									$status = $response['orders'][0]->status;
+									if($status === 'on-hold'){
+										$status_label = __('Menunggu Pembayaran', 'sejoli-pdf-file-attachment');
+									} else {
+										$status_label = __('Pesanan Selesai', 'sejoli-pdf-file-attachment');
+									}
+								?>
+								<b><?php echo __('INV #', 'sejoli-pdf-file-attachment').$response['orders'][0]->ID.' - '.$status_label; ?></b><br />
+								<?php echo __('Tanggal Dibuat: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?><br />
+								<?php echo __('Tanggal Jatuh Tempo: ', 'sejoli-pdf-file-attachment').'<br /><b>'.date("d F, Y").'</b>'; ?>
 								</td>
 							</tr>
 						</table>
@@ -203,14 +203,14 @@
 
 				<tr class="item">
 					<td>
-						<?php echo $response['orders'][0]->product->post_title; ?><br />
-						<?php 
+					<?php echo $response['orders'][0]->product->post_title; ?><br />
+					<?php 
 						if(isset($response['orders'][0]->meta_data['variants'])){
 							foreach ($response['orders'][0]->meta_data['variants'] as $variants):
 								echo $variants['type'] .' : '. $variants['label']. '<br />';
 				        	endforeach;
 				        }
-				        ?>
+			        ?>
 					</td>
 					<td><?php echo $response['orders'][0]->quantity; ?></td>
 					<td><?php echo sejolisa_price_format($response['orders'][0]->grand_total); ?></td>
