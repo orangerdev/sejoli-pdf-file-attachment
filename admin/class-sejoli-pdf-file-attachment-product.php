@@ -45,8 +45,8 @@ class Product {
 	 * @return array
 	 */
 	public function setup_pdf_file_attachment_setting_fields(array $fields) {
-		
-        $fields[]   = array(
+
+        $fields['pdf-attachment']   = array(
             'title'     => __('PDF', 'sejoli-pdf-file-attachment'),
             'fields'    => array(
                 Field::make( 'separator', 'sep_pdf_attachment' , __('PDF File Attachment', 'sejoli-pdf-file-attachment'))
@@ -59,12 +59,12 @@ class Product {
 
                 Field::make('checkbox', 'pdf_file_pesanan_selesai', __('Attach PDF Invoice - Email Pesanan Selesai', 'sejoli-pdf-file-attachment'))
                     ->set_option_value('yes')
-                    ->set_default_value(false),   
+                    ->set_default_value(false),
             )
         );
 
         return $fields;
-	
+
     }
 
 }

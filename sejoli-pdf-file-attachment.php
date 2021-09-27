@@ -13,7 +13,7 @@
  * @package           Sejoli_Pdf_File_Attachment
  *
  * @wordpress-plugin
- * Plugin Name:       Sejoli PDF File Attatchment
+ * Plugin Name:       Sejoli - PDF File Attatchment
  * Plugin URI:        https://sejoli.co.id
  * Description:       Plugin Sejoli PDF File Attachment untuk Attach File PDF di Email.
  * Version:           1.0.0
@@ -118,6 +118,16 @@ else :
 		$plugin->run();
 
 	}
+
+	require_once(SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+
+	$update_checker = Puc_v4_Factory::buildUpdateChecker(
+		'https://github.com/orangerdev/sejoli-pdf-file-attachment',
+		__FILE__,
+		'sejoli-pdf-file-attachment'
+	);
+
+	$update_checker->setBranch('main');
 
 	run_sejoli_pdf_file_attachment();
 
