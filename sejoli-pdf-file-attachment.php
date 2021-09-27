@@ -41,6 +41,12 @@ define( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION', '1.0.0' );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_URL', plugin_dir_url( __FILE__ ) );
 
+// Set up directory to save PDF
+$upload_dir = wp_upload_dir();
+
+define( 'SEJOLI_PDF_UPLOAD_DIR', $upload_dir['basedir'] . '/invoice');
+define( 'SEJOLI_PDF_UPLOAD_URL', $upload_dir['baseurl'] . '/invoice');
+
 if(version_compare(PHP_VERSION, '7.2.1') < 0 && !class_exists( 'WP_CLI' )) :
 
 	add_action('admin_notices', 'sejoli_pdf_file_attachment_error_php_message', 1);
