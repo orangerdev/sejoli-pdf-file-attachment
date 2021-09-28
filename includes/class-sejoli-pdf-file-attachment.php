@@ -83,7 +83,6 @@ class Sejoli_Pdf_File_Attachment {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
 	}
 
@@ -124,12 +123,6 @@ class Sejoli_Pdf_File_Attachment {
 		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-product.php';
 		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-invoice.php';
 
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'public/class-sejoli-pdf-file-attachment-public.php';
-
 		$this->loader = new Sejoli_Pdf_File_Attachment_Loader();
 
 	}
@@ -162,9 +155,6 @@ class Sejoli_Pdf_File_Attachment {
 
 		$admin = new Sejoli_Pdf_File_Attachment\Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
-
 		$product = new Sejoli_Pdf_File_Attachment\Admin\Product( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_filter( 'sejoli/product/fields', $product, 'setup_pdf_file_attachment_setting_fields', 97);
@@ -176,22 +166,6 @@ class Sejoli_Pdf_File_Attachment {
 		$this->loader->add_action( 'sejoli/notification/order/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
 		$this->loader->add_action( 'sejoli/order/set-status/completed', $invoice, 'generate_invoice_data_order_completed', 300);
 		$this->loader->add_action( 'sejoli/notification/order/completed', $invoice, 'generate_invoice_data_order_completed', 300);
-
-	}
-
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_public_hooks() {
-
-		$public = new Sejoli_Pdf_File_Attachment\Front( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $public, 'enqueue_scripts' );
 
 	}
 
