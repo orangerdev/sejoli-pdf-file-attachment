@@ -1,144 +1,220 @@
 <?php
 
 /**
- * The plugin bootstrap file
+ * The file that defines the core plugin class
  *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
+ * A class definition that includes attributes and functions used across both the
+ * public-facing side of the site and the admin area.
  *
- * @link              https://sejoli.co.id
- * @since             1.0.0
- * @package           Sejoli_Pdf_File_Attachment
+ * @link       https://sejoli.co.id
+ * @since      1.0.0
  *
- * @wordpress-plugin
- * Plugin Name:       Sejoli - PDF File Attatchment
- * Plugin URI:        https://sejoli.co.id
- * Description:       The plugin will generate PDF file for invoice and attach the file into email.
- * Version:           1.0.0
- * Author:            Sejoli Team
- * Author URI:        https://sejoli.co.id
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       sejoli-pdf-file-attachment
- * Domain Path:       /languages
+ * @package    Sejoli_Pdf_File_Attachment
+ * @subpackage Sejoli_Pdf_File_Attachment/includes
  */
-
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-
-	die;
-
-}
 
 /**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
+ * The core plugin class.
+ *
+ * This is used to define internationalization, admin-specific hooks, and
+ * public-facing site hooks.
+ *
+ * Also maintains the unique identifier of this plugin as well as the current
+ * version of the plugin.
+ *
+ * @since      1.0.0
+ * @package    Sejoli_Pdf_File_Attachment
+ * @subpackage Sejoli_Pdf_File_Attachment/includes
+ * @author     Sejoli Team <developer@sejoli.co.id>
  */
-define( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION', '1.0.0' );
-define( 'SEJOLI_PDF_FILE_ATTACHMENT_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SEJOLI_PDF_FILE_ATTACHMENT_URL', plugin_dir_url( __FILE__ ) );
-
-// Set up paths to include DOMPDF
-define( 'SEJOLI_PDF_FILE_ATTACHMENT_DOMPDF', SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'vendor/dompdf/' );
-
-// Set up directory to save PDF
-$upload_dir = wp_upload_dir();
-
-define( 'SEJOLI_PDF_UPLOAD_DIR', $upload_dir['basedir'] . '/invoice');
-define( 'SEJOLI_PDF_UPLOAD_URL', $upload_dir['baseurl'] . '/invoice');
-
-if(version_compare(PHP_VERSION, '7.2.1') < 0 && !class_exists( 'WP_CLI' )) :
-
-	add_action('admin_notices', 'sejoli_pdf_file_attachment_error_php_message', 1);
+class Sejoli_Pdf_File_Attachment {
 
 	/**
-	 * Display error message when PHP version is lower than 7.2.0
-	 * Hooked via admin_notices, priority 1
-	 * @return 	void
-	 */
-	function sejoli_pdf_file_attachment_error_php_message() {
-		?>
-		<div class="notice notice-error">
-			<h2>SEJOLI TIDAK BISA DIGUNAKAN DI HOSTING ANDA</h2>
-			<p>
-				Versi PHP anda tidak didukung oleh SEJOLI dan HARUS diupdate. Update versi PHP anda ke versi yang terbaru. <br >
-				Minimal versi PHP adalah 7.2.1 dan versi PHP anda adalah <?php echo PHP_VERSION; ?>
-			</p>
-			<p>
-				Jika anda menggunakan cpanel, anda bisa ikuti langkah ini <a href='https://www.rumahweb.com/journal/memilih-versi-php-melalui-cpanel/' target="_blank" class='button'>Update Versi PHP</a>
-			</p>
-			<p>
-				Jika anda masih kesulitan untuk update versi PHP anda, anda bisa meminta bantuan pada CS hosting anda.
-			</p>
-		</div>
-		<?php
-	}
-
-else :
-
-	/**
-	 * The code that runs during plugin activation.
-	 * This action is documented in includes/class-sejoli-pdf-file-attachment-activator.php
-	 */
-	function activate_sejoli_pdf_file_attachment() {
-
-		require_once plugin_dir_path( __FILE__ ) . 'includes/class-sejoli-pdf-file-attachment-activator.php';
-
-		Sejoli_Pdf_File_Attachment_Activator::activate();
-
-	}
-
-	/**
-	 * The code that runs during plugin deactivation.
-	 * This action is documented in includes/class-sejoli-pdf-file-attachment-deactivator.php
-	 */
-	function deactivate_sejoli_pdf_file_attachment() {
-
-		require_once plugin_dir_path( __FILE__ ) . 'includes/class-sejoli-pdf-file-attachment-deactivator.php';
-
-		Sejoli_Pdf_File_Attachment_Deactivator::deactivate();
-
-	}
-
-	register_activation_hook( __FILE__, 'activate_sejoli_pdf_file_attachment' );
-	register_deactivation_hook( __FILE__, 'deactivate_sejoli_pdf_file_attachment' );
-
-	/**
-	 * The core plugin class that is used to define internationalization,
-	 * admin-specific hooks, and public-facing site hooks.
-	 */
-	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-	require plugin_dir_path( __FILE__ ) . 'includes/class-sejoli-pdf-file-attachment.php';
-
-	/**
-	 * Begins execution of the plugin.
+	 * The loader that's responsible for maintaining and registering all hooks that power
+	 * the plugin.
 	 *
-	 * Since everything within the plugin is registered via hooks,
-	 * then kicking off the plugin from this point in the file does
-	 * not affect the page life cycle.
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      Sejoli_Pdf_File_Attachment_Loader $loader Maintains and registers all hooks for the plugin.
+	 */
+	protected $loader;
+
+	/**
+	 * The unique identifier of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string $plugin_name The string used to uniquely identify this plugin.
+	 */
+	protected $plugin_name;
+
+	/**
+	 * The current version of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      string $version The current version of the plugin.
+	 */
+	protected $version;
+
+	/**
+	 * Define the core functionality of the plugin.
+	 *
+	 * Set the plugin name and the plugin version that can be used throughout the plugin.
+	 * Load the dependencies, define the locale, and set the hooks for the admin area and
+	 * the public-facing side of the site.
 	 *
 	 * @since    1.0.0
 	 */
-	function run_sejoli_pdf_file_attachment() {
+	public function __construct() {
 
-		$plugin = new Sejoli_Pdf_File_Attachment();
-		$plugin->run();
+		if ( defined( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION' ) ) {
+
+			$this->version = SEJOLI_PDF_FILE_ATTACHMENT_VERSION;
+
+		} else {
+
+			$this->version = '1.0.0';
+
+		}
+
+		$this->plugin_name = 'sejoli-pdf-file-attachment';
+
+		$this->load_dependencies();
+		$this->set_locale();
+		$this->define_admin_hooks();
 
 	}
 
-	require_once(SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'vendor/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+	/**
+	 * Load the required dependencies for this plugin.
+	 *
+	 * Include the following files that make up the plugin:
+	 *
+	 * - Sejoli_Pdf_File_Attachment_Loader. Orchestrates the hooks of the plugin.
+	 * - Sejoli_Pdf_File_Attachment_i18n. Defines internationalization functionality.
+	 * - Sejoli_Pdf_File_Attachment_Admin. Defines all hooks for the admin area.
+	 * - Sejoli_Pdf_File_Attachment_Public. Defines all hooks for the public side of the site.
+	 *
+	 * Create an instance of the loader which will be used to register the hooks
+	 * with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function load_dependencies() {
 
-	$update_checker = Puc_v4_Factory::buildUpdateChecker(
-		'https://github.com/orangerdev/sejoli-pdf-file-attachment',
-		__FILE__,
-		'sejoli-pdf-file-attachment'
-	);
+		/**
+		 * The class responsible for orchestrating the actions and filters of the
+		 * core plugin.
+		 */
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'includes/class-sejoli-pdf-file-attachment-loader.php';
 
-	$update_checker->setBranch('main');
+		/**
+		 * The class responsible for defining internationalization functionality
+		 * of the plugin.
+		 */
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'includes/class-sejoli-pdf-file-attachment-i18n.php';
 
-	run_sejoli_pdf_file_attachment();
+		/**
+		 * The class responsible for defining all actions that occur in the admin area.
+		 */
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-admin.php';
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-product.php';
+		require_once SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'admin/class-sejoli-pdf-file-attachment-invoice.php';
 
-endif;
+		$this->loader = new Sejoli_Pdf_File_Attachment_Loader();
+
+	}
+
+	/**
+	 * Define the locale for this plugin for internationalization.
+	 *
+	 * Uses the Sejoli_Pdf_File_Attachment_i18n class in order to set the domain and to register the hook
+	 * with WordPress.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function set_locale() {
+
+		$plugin_i18n = new Sejoli_Pdf_File_Attachment_i18n();
+
+		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+
+	}
+
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_admin_hooks() {
+
+		$admin = new Sejoli_Pdf_File_Attachment\Admin( $this->get_plugin_name(), $this->get_version() );
+
+		$product = new Sejoli_Pdf_File_Attachment\Admin\Product( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_filter( 'sejoli/product/fields', $product, 'setup_pdf_file_attachment_setting_fields', 97);
+
+		$invoice = new Sejoli_Pdf_File_Attachment\Admin\Invoice( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_filter( 'sejoli/notification/email/attachments', $invoice, 'set_pdf_email_attachments', 10, 2);
+		$this->loader->add_action( 'sejoli/order/set-status/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
+		$this->loader->add_action( 'sejoli/notification/order/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
+		$this->loader->add_action( 'sejoli/order/set-status/completed', $invoice, 'generate_invoice_data_order_completed', 300);
+		$this->loader->add_action( 'sejoli/notification/order/completed', $invoice, 'generate_invoice_data_order_completed', 300);
+
+	}
+
+	/**
+	 * Run the loader to execute all of the hooks with WordPress.
+	 *
+	 * @since    1.0.0
+	 */
+	public function run() {
+
+		$this->loader->run();
+
+	}
+
+	/**
+	 * The name of the plugin used to uniquely identify it within the context of
+	 * WordPress and to define internationalization functionality.
+	 *
+	 * @since     1.0.0
+	 * @return    string The name of the plugin.
+	 */
+	public function get_plugin_name() {
+
+		return $this->plugin_name;
+
+	}
+
+	/**
+	 * The reference to the class that orchestrates the hooks with the plugin.
+	 *
+	 * @since     1.0.0
+	 * @return    Sejoli_Pdf_File_Attachment_Loader    Orchestrates the hooks of the plugin.
+	 */
+	public function get_loader() {
+
+		return $this->loader;
+
+	}
+
+	/**
+	 * Retrieve the version number of the plugin.
+	 *
+	 * @since     1.0.0
+	 * @return    string    The version number of the plugin.
+	 */
+	public function get_version() {
+
+		return $this->version;
+
+	}
+
+}

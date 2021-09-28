@@ -1,6 +1,6 @@
 {
     "require": {
-        "tareq1988/wp-eloquent": "dev-master",
-        "yahnis-elsts/plugin-update-checker": "^4.7"
+        "spipu/html2pdf": "^5.2",
+        "dompdf/dompdf": "^1.0"
     }
 }
