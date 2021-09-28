@@ -110,6 +110,7 @@ else :
 	 * The core plugin class that is used to define internationalization,
 	 * admin-specific hooks, and public-facing site hooks.
 	 */
+	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class-sejoli-pdf-file-attachment.php';
 
 	/**
