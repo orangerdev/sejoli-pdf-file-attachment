@@ -41,6 +41,9 @@ define( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION', '1.0.0' );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_URL', plugin_dir_url( __FILE__ ) );
 
+// Set up paths to include DOMPDF
+define( 'SEJOLI_PDF_FILE_ATTACHMENT_DOMPDF', SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'vendor/dompdf/' );
+
 // Set up directory to save PDF
 $upload_dir = wp_upload_dir();
 
