@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Sejoli - PDF File Attatchment
  * Plugin URI:        https://sejoli.co.id
- * Description:       Plugin Sejoli PDF File Attachment untuk Attach File PDF di Email.
+ * Description:       The plugin will generate PDF file for invoice and attach the file into email.
  * Version:           1.0.0
  * Author:            Sejoli Team
  * Author URI:        https://sejoli.co.id
