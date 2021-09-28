@@ -98,6 +98,13 @@
 			.invoice-box.rtl table tr td:nth-child(2) {
 				text-align: left;
 			}
+
+			.footer-text {
+				font-size: 11px;
+				text-align: center;
+				width: 100%;
+				margin-top: 4em;
+			}
 		</style>
 	</head>
 
@@ -222,6 +229,13 @@
 					<td><b><?php echo __('TOTAL', 'sejoli-pdf-file-attachment').' : '.sejolisa_price_format($response['orders'][0]->grand_total); ?></b></td>
 				</tr>
 			</table>
+
+			<div class="footer-text">
+				<?php
+					$footer_text = carbon_get_post_meta( $response['orders'][0]->product->ID, 'pdf_file_footer_text' );
+					echo wpautop( $footer_text );
+				?>
+			</div>
 		</div>
 	</body>
 </html>

@@ -60,6 +60,8 @@ class Product {
                 Field::make('checkbox', 'pdf_file_pesanan_selesai', __('Attach PDF Invoice - Email Pesanan Selesai', 'sejoli-pdf-file-attachment'))
                     ->set_option_value('yes')
                     ->set_default_value(false),
+
+                Field::make('rich_text', 'pdf_file_footer_text', __('Footer Text', 'sejoli-pdf-file-attachment')),
             )
         );
 
