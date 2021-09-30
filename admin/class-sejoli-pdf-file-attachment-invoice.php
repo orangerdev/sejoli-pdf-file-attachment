@@ -162,7 +162,6 @@ class Invoice {
             ];
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
-            $this->libraries['on-hold']->trigger( $order_data );
 
             if( null !== $response ) :
                 
@@ -232,7 +231,6 @@ class Invoice {
             ];
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
-            $this->libraries['completed']->trigger( $order_data );
 
             if( null !== $response ) :
                 
