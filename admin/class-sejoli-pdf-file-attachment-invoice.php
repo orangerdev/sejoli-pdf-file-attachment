@@ -219,6 +219,10 @@ class Invoice {
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
 
+                if($order_data) {
+                    wp_delete_file($file_path);
+                }
+
                 return $order_data; //wp_send_json( $invoice_url );
 
             endif;
@@ -288,6 +292,10 @@ class Invoice {
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
 
+                if($order_data) {
+                    wp_delete_file($file_path);
+                }
+                
                 return $order_data; //wp_send_json( $invoice_url );
 
             endif;
