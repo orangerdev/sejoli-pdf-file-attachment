@@ -26,6 +26,12 @@ class Invoice {
 
     protected $blacklist_extension_for_email = array('zip', 'exe');
 
+    /**
+     * Attachment for file
+     * @var [type]
+     */
+    public $attachments = false;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -106,13 +112,13 @@ class Invoice {
 
                     if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
                     
-                        $attachments[] = $file['path'];
+                        $this->attachments[] = $file['path'];
                     
                     endif;
 
                 endforeach;
                 
-                return $attachments;
+                return $this->attachments;
 
             endif;
 
@@ -144,13 +150,13 @@ class Invoice {
 
                     if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
                     
-                        $attachments[] = $file['path'];
+                        $this->attachments[] = $file['path'];
                     
                     endif;
 
                 endforeach;
                 
-                return $attachments;
+                return $this->attachments;
 
             endif;
 
@@ -294,6 +300,20 @@ class Invoice {
 
         endif;
     
+    }
+
+    /**
+     * Clear Temporary Attachments
+     * 
+     * Hooked via action sejoli/email/send, priority 300
+     * 
+     * @since   1.0.0
+     * @return  unlink attachments
+     */
+    public function clear_attachments( $attachments = array() ){
+        foreach ( $this->attachments as $attachment ) {
+            @unlink( $attachment );
+        }
     }
 
 }
