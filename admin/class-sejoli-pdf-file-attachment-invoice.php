@@ -26,6 +26,12 @@ class Invoice {
 
     protected $blacklist_extension_for_email = array('zip', 'exe');
 
+    /**
+     * Attachment for file
+     * @var [type]
+     */
+    public $attachments = false;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -80,12 +86,11 @@ class Invoice {
      */
     public function set_pdf_email_attachments($attachments = array(), array $invoice_data) {
         
-        if(isset($invoice_data['order_data']) && $invoice_data['order_data']['status'] === 'on-hold' || isset($invoice_data['order_data']) && $invoice_data['order_data']['status'] === 'completed'):
+        if(isset($invoice_data['order_data']) && $invoice_data['order_data']['status'] === 'on-hold'):
 
             $pdf_file_menunggu_pembayaran = carbon_get_post_meta( $invoice_data['product_data']->ID, 'pdf_file_menunggu_pembayaran' );
-            $pdf_file_pesanan_selesai     = carbon_get_post_meta( $invoice_data['product_data']->ID, 'pdf_file_pesanan_selesai' );
 
-            if( true === boolval( $pdf_file_menunggu_pembayaran ) || true === boolval( $pdf_file_pesanan_selesai ) || true === boolval( $pdf_file_menunggu_pembayaran ) && true === boolval( $pdf_file_pesanan_selesai  ) ) :
+            if( true === boolval( $pdf_file_menunggu_pembayaran ) ) :
 
                 $invoice_data['product_data']->files = [];
 
@@ -107,13 +112,51 @@ class Invoice {
 
                     if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
                     
-                        $attachments[] = $file['path'];
+                        $this->attachments[] = $file['path'];
                     
                     endif;
 
                 endforeach;
                 
-                return $attachments;
+                return $this->attachments;
+
+            endif;
+
+        endif;
+
+        if(isset($invoice_data['order_data']) && $invoice_data['order_data']['status'] === 'completed'):
+
+            $pdf_file_pesanan_selesai = carbon_get_post_meta( $invoice_data['product_data']->ID, 'pdf_file_pesanan_selesai' );
+
+            if( true === boolval( $pdf_file_pesanan_selesai ) ) :
+
+                $invoice_data['product_data']->files = [];
+
+                $file_name   = 'INV-'.$invoice_data['order_data']['ID'].'-'.$invoice_data['order_data']['status'].'-'.date("Y-m-d").'.pdf';
+                $file_path   = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
+                $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
+
+                $invoice_data['product_data']->files[] = [
+                    // 'ID'    => $file_id,
+                    'path' => $file_path,
+                    'link' => $invoice_url
+                ];
+
+                $files = $invoice_data['product_data']->files;
+
+                foreach( (array) $files as $file ) :
+
+                    $file_parts = pathinfo($file['path']);
+
+                    if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
+                    
+                        $this->attachments[] = $file['path'];
+                    
+                    endif;
+
+                endforeach;
+                
+                return $this->attachments;
 
             endif;
 
@@ -257,6 +300,20 @@ class Invoice {
 
         endif;
     
+    }
+
+    /**
+     * Clear Temporary Attachments
+     * 
+     * Hooked via action sejoli/email/send, priority 300
+     * 
+     * @since   1.0.0
+     * @return  unlink attachments
+     */
+    public function clear_attachments( $attachments = array() ){
+        foreach ( $this->attachments as $attachment ) {
+            @unlink( $attachment );
+        }
     }
 
 }
