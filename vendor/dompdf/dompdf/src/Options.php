@@ -284,7 +284,7 @@ class Options
         $this->setChroot(array($rootDir));
         $this->setRootDir($rootDir);
         $this->setTempDir(sys_get_temp_dir());
-        $this->setTempDir(plugin_dir_path( __FILE__ ) . 'dompdf/tmp/'); // https://devnote.in/file_exists-open_basedir-restriction-in-effect-file-tmp-log-htm/
+        $this->setTempDir(plugin_dir_path( __FILE__ )); // https://devnote.in/file_exists-open_basedir-restriction-in-effect-file-tmp-log-htm/
         $this->setFontDir($rootDir . "/lib/fonts");
         $this->setFontCache($this->getFontDir());
         $this->setLogOutputFile($this->getTempDir() . "/log.htm");
