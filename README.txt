@@ -4,7 +4,7 @@ Donate link: https://sejoli.co.id
 Tags: membership, ecommerce, pdf
 Requires at least: 5.8.0
 Tested up to: 5.8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 == Changelog ==
+= 1.1.0 - 03 Januari 2022
+* Fix temporary folder
 
 = 1.0.0 - 27 Sept 2021 =
 * First Release
