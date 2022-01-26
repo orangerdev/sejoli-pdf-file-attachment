@@ -94,12 +94,13 @@ class Invoice {
 
                 $invoice_data['product_data']->files = [];
 
-                $file_name   = 'INV-'.$invoice_data['order_data']['ID'].'-'.$invoice_data['order_data']['status'].'-'.date("Y-m-d").'.pdf';
+                $file_name   = 'INV-'.$invoice_data['order_data']['ID'].'-'.$invoice_data['order_data']['status'].'_'.date("Y-m-d").'.pdf';
+                $file_id     = $invoice_data['order_data']['ID'];
                 $file_path   = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
 
                 $invoice_data['product_data']->files[] = [
-                    // 'ID'    => $file_id,
+                    'ID'   => $file_id,
                     'path' => $file_path,
                     'link' => $invoice_url
                 ];
@@ -112,13 +113,13 @@ class Invoice {
 
                     if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
                     
-                        $this->attachments[] = $file['path'];
+                        $attachments[] = $file['path'];
                     
                     endif;
 
                 endforeach;
                 
-                return $this->attachments;
+                return $attachments;
 
             endif;
 
@@ -132,12 +133,13 @@ class Invoice {
 
                 $invoice_data['product_data']->files = [];
 
-                $file_name   = 'INV-'.$invoice_data['order_data']['ID'].'-'.$invoice_data['order_data']['status'].'-'.date("Y-m-d").'.pdf';
+                $file_name   = 'INV-'.$invoice_data['order_data']['ID'].'-'.$invoice_data['order_data']['status'].'_'.date("Y-m-d").'.pdf';
+                $file_id     = $invoice_data['order_data']['ID'];
                 $file_path   = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
 
                 $invoice_data['product_data']->files[] = [
-                    // 'ID'    => $file_id,
+                    'ID'   => $file_id,
                     'path' => $file_path,
                     'link' => $invoice_url
                 ];
@@ -150,13 +152,13 @@ class Invoice {
 
                     if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
                     
-                        $this->attachments[] = $file['path'];
+                        $attachments[] = $file['path'];
                     
                     endif;
 
                 endforeach;
                 
-                return $this->attachments;
+                return $attachments;
 
             endif;
 
@@ -220,7 +222,7 @@ class Invoice {
                 $output = $dompdf->output();
 
                 wp_mkdir_p( SEJOLI_PDF_UPLOAD_DIR );
-                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'-'.date("Y-m-d").'.pdf';
+                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'_'.date("Y-m-d").'.pdf';
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
@@ -289,7 +291,7 @@ class Invoice {
                 $output = $dompdf->output();
 
                 wp_mkdir_p( SEJOLI_PDF_UPLOAD_DIR );
-                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'-'.date("Y-m-d").'.pdf';
+                $file_name = 'INV-'.$response['orders'][0]->ID.'-'.$response['orders'][0]->status.'_'.date("Y-m-d").'.pdf';
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
@@ -303,17 +305,69 @@ class Invoice {
     }
 
     /**
-     * Clear Temporary Attachments
+     * Clear PDF Invoice Temporary Files
      * 
-     * Hooked via action sejoli/email/send, priority 300
+     * Hooked via action cron delete_pdf_invoice_file
      * 
      * @since   1.0.0
      * @return  unlink attachments
      */
-    public function clear_attachments( $attachments = array() ){
-        foreach ( $this->attachments as $attachment ) {
-            @unlink( $attachment );
+    public function clear_pdf_invoice_temporary_file() {
+        
+        $threeDbefore = date( "Y-m-d", strtotime( "-3 days" ) );
+        $attachments  = glob( SEJOLI_PDF_UPLOAD_DIR."/*.pdf" );
+
+        foreach( $attachments as $attachment ) {
+            
+            if( !is_file( $attachment ) ) {
+            
+                continue;
+            
+            }
+
+            $fileParts = explode( '_', basename( $attachment ) );
+            $fileDate  = str_replace(".pdf", "", $fileParts[1] );
+
+            if( !empty( $fileDate ) && $fileDate <= $threeDbefore ) {
+        
+                @unlink( $attachment );
+        
+            }
+        
         }
+
+    }
+
+    /**
+     * Create Updating Status Order to Completed Based on Shipment Status is Delivered Cron Job
+     *
+     * @since 1.0.0
+     */
+    public function sejoli_delete_pdf_invoice_temporary_file_cron_schedules( $schedules ) {
+
+        $schedules['delete_pdf_invoice_temporary_file'] = array(
+            'interval' => 300, 
+            'display'  => 'Delete PDF Invoice Temporary File Once every 5 minutes'
+        );
+
+        return $schedules;
+
+    }
+
+    /**
+     * Set Schedule Event for Updating Status Order to Complete Based on Shipping Status is Delivered Cron Job
+     *
+     * @since 1.0.0
+     */
+    public function sejoli_schedule_delete_pdf_invoice_temporary_file() {
+
+        // Schedule an action if it's not already scheduled
+        if ( ! wp_next_scheduled( 'delete_pdf_invoice_file' ) ) {
+
+            wp_schedule_event( time(), 'delete_pdf_invoice_temporary_file', 'delete_pdf_invoice_file' );
+
+        }
+
     }
 
 }
