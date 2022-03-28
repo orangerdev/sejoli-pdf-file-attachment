@@ -176,24 +176,8 @@ class Invoice {
      * @return  pdf file attachment
      */
     public function generate_invoice_data_order_on_hold( array $order_data ){
-        
-        // $response = $order_data;
+
         $response = sejolisa_get_orders(['ID' => $order_data['ID'] ]);
-        
-        require_once ( SEJOLISA_DIR . 'payments/main.php' );
-        require_once ( SEJOLISA_DIR . 'payments/manual.php' );
-
-        $payments['manual'] = new \SejoliSA\Payment\Manual();
-
-        $this->payments = apply_filters('sejoli/payment/available-libraries', $payments);
-
-        $used_module = $response['orders'][0]->payment_gateway;
-
-        if( isset($this->payments[$used_module]) ) :
-
-            $response['orders'][0]->payment_info = $this->payments[$used_module]->set_payment_info($order_data);
-
-        endif;
 
         $pdf_file_menunggu_pembayaran = carbon_get_post_meta( $response['orders'][0]->product_id, 'pdf_file_menunggu_pembayaran' );
 
@@ -246,23 +230,7 @@ class Invoice {
      */
     public function generate_invoice_data_order_completed( array $order_data ){
 
-        // $response = $order_data;
         $response = sejolisa_get_orders(['ID' => $order_data['ID'] ]);
-
-        require_once ( SEJOLISA_DIR . 'payments/main.php' );
-        require_once ( SEJOLISA_DIR . 'payments/manual.php' );
-
-        $payments['manual'] = new \SejoliSA\Payment\Manual();
-
-        $this->payments = apply_filters('sejoli/payment/available-libraries', $payments);
-
-        $used_module = $response['orders'][0]->payment_gateway;
-
-        if( isset($this->payments[$used_module]) ) :
-
-            $response['orders'][0]->payment_info = $this->payments[$used_module]->set_payment_info($order_data);
-
-        endif;
 
         $pdf_file_pesanan_selesai = carbon_get_post_meta( $response['orders'][0]->product_id, 'pdf_file_pesanan_selesai' );
 

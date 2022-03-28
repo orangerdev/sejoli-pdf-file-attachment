@@ -184,7 +184,7 @@
 					<td>
 					<?php 
 						if( $response['orders'][0]->payment_gateway === 'manual' ): 
-							_e('Informasi Akun', 'sejoli-pdf-file-attachment');
+							echo '&nbsp;';
 						else:
 							echo '&nbsp;';
 						endif;
@@ -196,7 +196,7 @@
 					<td><?php echo ucfirst($response['orders'][0]->payment_gateway); ?></td>
 					<td>&nbsp;</td>
 					<?php if( $response['orders'][0]->payment_gateway === 'manual' ): ?>
-						<td><?php echo $response['orders'][0]->payment_info['bank'].' - '.$response['orders'][0]->payment_info['account_number'].'<br /> (a/n. '.$response['orders'][0]->payment_info['owner'].')'; ?></td>
+						<td>&nbsp;</td>
 					<?php else: ?>
 						<td>&nbsp;</td>
 					<?php endif; ?>
