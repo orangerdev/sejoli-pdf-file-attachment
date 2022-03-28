@@ -166,7 +166,11 @@ class Sejoli_Pdf_File_Attachment {
 		$this->loader->add_action( 'sejoli/notification/order/on-hold', $invoice, 'generate_invoice_data_order_on_hold', 100);
 		$this->loader->add_action( 'sejoli/order/set-status/completed', $invoice, 'generate_invoice_data_order_completed', 300);
 		$this->loader->add_action( 'sejoli/notification/order/completed', $invoice, 'generate_invoice_data_order_completed', 300);
-		$this->loader->add_action( 'sejoli/email/send', $invoice, 'clear_attachments', 300);
+		// $this->loader->add_action( 'sejoli/email/send', $invoice, 'clear_pdf_invoice_temporary_file', 300);
+		
+		$this->loader->add_filter( 'cron_schedules', $invoice, 'sejoli_delete_pdf_invoice_temporary_file_cron_schedules' );
+		$this->loader->add_action( 'admin_init', $invoice, 'sejoli_schedule_delete_pdf_invoice_temporary_file' );
+		$this->loader->add_action( 'delete_pdf_invoice_file', $invoice, 'clear_pdf_invoice_temporary_file' );
 
 	}
 
