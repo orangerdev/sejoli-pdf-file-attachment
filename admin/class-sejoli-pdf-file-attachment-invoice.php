@@ -191,10 +191,10 @@ class Invoice {
             ];
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
-
-            if( null !== $response ) :
+ 
+            if( $response['valid'] === 1 ) :
                 
-                require_once( plugin_dir_path( __FILE__ ) . '../templates/invoice/sejoli-pdf-file-invoice-template.php' );
+                require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
 
                 $options = new Options();
                 $options->set( 'isRemoteEnabled', true );
@@ -245,9 +245,9 @@ class Invoice {
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
 
-            if( null !== $response ) :
+            if( $response['valid'] === 1 ) :
                 
-                require_once( plugin_dir_path( __FILE__ ) . '../templates/invoice/sejoli-pdf-file-invoice-template.php' );
+                require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
 
                 $options = new Options();
                 $options->set( 'isRemoteEnabled', true );
