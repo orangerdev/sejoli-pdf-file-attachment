@@ -3,8 +3,8 @@ Contributors: orangerdev
 Donate link: https://sejoli.co.id
 Tags: membership, ecommerce, pdf
 Requires at least: 5.8.0
-Tested up to: 5.8.0
-Stable tag: 1.1.1
+Tested up to: 6.0.2
+Stable tag: 1.1.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.2 - 29 October 2022
+* Fix issue with template directory
 
 = 1.1.1 - 03 April 2022
 * Fix issue when checkout
