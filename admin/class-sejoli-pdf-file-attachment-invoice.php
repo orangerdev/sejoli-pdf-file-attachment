@@ -191,8 +191,9 @@ class Invoice {
             ];
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
+
  
-            if( $response['valid'] === 1 ) :
+            if( true === boolval($response['valid']) ) :
                 
                 require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
 
@@ -245,7 +246,7 @@ class Invoice {
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
 
-            if( $response['valid'] === 1 ) :
+            if( true === boolval($response['valid']) ) :
                 
                 require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
 
