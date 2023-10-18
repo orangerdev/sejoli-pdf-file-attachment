@@ -295,6 +295,9 @@ class Invoice {
             }
 
             $fileParts = explode( '_', basename( $attachment ) );
+            if ( ! isset($fileParts[1])) {
+               $fileParts[1] = null;
+            }
             $fileDate  = str_replace(".pdf", "", $fileParts[1] );
 
             if( !empty( $fileDate ) && $fileDate <= $threeDbefore ) {
