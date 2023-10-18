@@ -22,6 +22,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 == Changelog ==
+= 1.1.4 - 18 Oktober 2023
+* Fix issue error notice on delete temporary file
+
 = 1.1.3 - 12 Februari 2023
 * Fix issue with PDF attachment in email
 
