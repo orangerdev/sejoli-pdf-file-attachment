@@ -22,6 +22,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 == Changelog ==
+= 1.1.5 - 11 Januari 2024
+* Support with php 8
+
 = 1.1.4 - 18 Oktober 2023
 * Fix issue error notice on delete temporary file
 

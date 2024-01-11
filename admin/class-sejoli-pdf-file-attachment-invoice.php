@@ -84,7 +84,7 @@ class Invoice {
      * @param array $invoice_data
      * @return array
      */
-    public function set_pdf_email_attachments($attachments = array(), array $invoice_data) {
+    public function set_pdf_email_attachments($attachments = array(), $invoice_data = array()) {
         
         if(isset($invoice_data['order_data']) && $invoice_data['order_data']['status'] === 'on-hold'):
 
