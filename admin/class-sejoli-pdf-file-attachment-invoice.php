@@ -6,23 +6,23 @@ use Dompdf\Options;
 
 class Invoice {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string $plugin_name The ID of this plugin.
-	 */
-	private $plugin_name;
+    /**
+     * The ID of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string $plugin_name The ID of this plugin.
+     */
+    private $plugin_name;
 
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string $version The current version of this plugin.
-	 */
-	private $version;
+    /**
+     * The version of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string $version The current version of this plugin.
+     */
+    private $version;
 
     protected $blacklist_extension_for_email = array('zip', 'exe');
 
@@ -32,19 +32,19 @@ class Invoice {
      */
     public $attachments = false;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string $plugin_name The name of this plugin.
-	 * @param      string $version The version of this plugin.
-	 */
-	public function __construct( $plugin_name, $version ) {
+    /**
+     * Initialize the class and set its properties.
+     *
+     * @since    1.0.0
+     * @param      string $plugin_name The name of this plugin.
+     * @param      string $version The version of this plugin.
+     */
+    public function __construct( $plugin_name, $version ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version 	   = $version;
+        $this->plugin_name = $plugin_name;
+        $this->version     = $version;
 
-	}
+    }
 
     /**
      * Get subdistrict detail
@@ -194,8 +194,12 @@ class Invoice {
 
  
             if( true === boolval($response['valid']) ) :
+
+                $html = '';
                 
-                require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
+                ob_start();
+                require(SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php');
+                $html = ob_get_clean();
 
                 $options = new Options();
                 $options->set( 'isRemoteEnabled', true );
@@ -211,6 +215,9 @@ class Invoice {
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
+
+                error_log(print_r($output, true));
+                error_log(print_r($options, true));
 
                 return $order_data; //wp_send_json( $invoice_url );
 
@@ -247,8 +254,12 @@ class Invoice {
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
 
             if( true === boolval($response['valid']) ) :
+
+                $html = '';
                 
-                require_once( SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php' );
+                ob_start();
+                require(SEJOLI_PDF_FILE_ATTACHMENT_DIR . 'templates/invoice/sejoli-pdf-file-invoice-template.php');
+                $html = ob_get_clean();
 
                 $options = new Options();
                 $options->set( 'isRemoteEnabled', true );

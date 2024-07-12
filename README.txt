@@ -22,6 +22,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.6 - 12 Juli 2024
+* Fix bug checkout error when using pdf
+
 = 1.1.5 - 11 Januari 2024
 * Support with php 8
 
