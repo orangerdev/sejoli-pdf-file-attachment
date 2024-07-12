@@ -1,5 +1,3 @@
-<?php ob_start(); ?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -239,8 +237,3 @@
 		</div>
 	</body>
 </html>
-
-<?php
-	$html = ob_get_contents();
-	ob_end_clean();
-?>	
