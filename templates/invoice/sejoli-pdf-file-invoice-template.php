@@ -191,10 +191,27 @@
 				</tr>
 
 				<tr class="details">
-					<td><?php echo ucfirst($response['orders'][0]->payment_gateway); ?></td>
+					<?php
+						if ( $response['orders'][0]->payment_gateway === 'duitku' ):
+						    $payment_channel = $response['orders'][0]->payment_gateway ." (".$response['orders'][0]->meta_data['duitku']['channel'].")";
+						else:
+						    $payment_channel = $response['orders'][0]->payment_gateway;
+						endif;
+					?>
+		
+					<td><?php echo ucfirst($payment_channel); ?></td>
 					<td>&nbsp;</td>
 					<?php if( $response['orders'][0]->payment_gateway === 'manual' ): ?>
 						<td>&nbsp;</td>
+					<?php elseif( $response['orders'][0]->payment_gateway === 'duitku' ): ?>
+						<?php
+						if (isset($response['orders'][0]->meta_data['duitku']) && isset($response['orders'][0]->meta_data['duitku']['duitku_fee'])) :
+						    $payment_fee = $response['orders'][0]->meta_data['duitku']['duitku_fee'];
+						else:
+						    $payment_fee = "Rp. 0";
+						endif;
+						?>
+						<td><?php echo __("Biaya Layanan: ") . sejolisa_price_format($payment_fee); ?></td>
 					<?php else: ?>
 						<td>&nbsp;</td>
 					<?php endif; ?>

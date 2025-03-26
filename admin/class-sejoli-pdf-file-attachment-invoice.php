@@ -192,7 +192,6 @@ class Invoice {
 
             $this->libraries = apply_filters( 'sejoli/notification/libraries', $this->libraries );
 
- 
             if( true === boolval($response['valid']) ) :
 
                 $html = '';
@@ -215,9 +214,6 @@ class Invoice {
                 $file_path = SEJOLI_PDF_UPLOAD_DIR.'/'.$file_name;
                 file_put_contents( $file_path, $output );
                 $invoice_url = SEJOLI_PDF_UPLOAD_URL.'/'.$file_name;
-
-                error_log(print_r($output, true));
-                error_log(print_r($options, true));
 
                 return $order_data; //wp_send_json( $invoice_url );
 

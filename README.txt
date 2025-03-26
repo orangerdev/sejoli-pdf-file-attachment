@@ -23,6 +23,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.1.7 - 25 Maret 2025
+* Add payment fee in pdf
+* Update dompdf library
+
 = 1.1.6 - 12 Juli 2024
 * Fix bug checkout error when using pdf
 
