@@ -11,6 +11,7 @@ class ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f
         array (
             'Svg\\' => 4,
             'Spipu\\Html2Pdf\\' => 15,
+            'Sabberworm\\CSS\\' => 15,
         ),
         'F' => 
         array (
@@ -31,6 +32,10 @@ class ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f
         array (
             0 => __DIR__ . '/..' . '/spipu/html2pdf/src',
         ),
+        'Sabberworm\\CSS\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
+        ),
         'FontLib\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
@@ -38,16 +43,6 @@ class ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f
         'Dompdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
-        ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'S' => 
-        array (
-            'Sabberworm\\CSS' => 
-            array (
-                0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib',
-            ),
         ),
     );
 
@@ -70,8 +65,6 @@ class ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f
         'TCPDF_FONTS' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_fonts.php',
         'TCPDF_FONT_DATA' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_font_data.php',
         'TCPDF_IMAGES' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_images.php',
-        'TCPDF_IMPORT' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_import.php',
-        'TCPDF_PARSER' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_parser.php',
         'TCPDF_STATIC' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_static.php',
     );
 
@@ -80,7 +73,6 @@ class ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit51885f2b9cc2583c32f98c07253eb22f::$classMap;
 
         }, null, ClassLoader::class);
