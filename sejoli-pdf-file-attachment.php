@@ -16,7 +16,7 @@
  * Plugin Name:       Sejoli - PDF File Attatchment
  * Plugin URI:        https://sejoli.co.id
  * Description:       Plugin Sejoli PDF File Attachment untuk Attach File PDF di Email.
- * Version:           1.1.7
+ * Version:           1.1.8
  * Author:            Sejoli Team
  * Author URI:        https://sejoli.co.id
  * License:           GPL-2.0+
@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION', '1.1.7' );
+define( 'SEJOLI_PDF_FILE_ATTACHMENT_VERSION', '1.1.8' );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SEJOLI_PDF_FILE_ATTACHMENT_URL', plugin_dir_url( __FILE__ ) );
 

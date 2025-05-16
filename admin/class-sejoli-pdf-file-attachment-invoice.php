@@ -33,6 +33,12 @@ class Invoice {
     public $attachments = false;
 
     /**
+     * Libraries
+     * @var [type]
+     */
+    public $libraries = false;
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
@@ -105,19 +111,20 @@ class Invoice {
                     'link' => $invoice_url
                 ];
 
-                $files = $invoice_data['product_data']->files;
+                $files = is_array($invoice_data['product_data']->files) ? $invoice_data['product_data']->files : [];
+                $attachments = [];
 
-                foreach( (array) $files as $file ) :
+                if (!empty($files) && is_array($files)) {
+                    foreach ($files as $file) {
+                        if (!isset($file['path'])) continue;
 
-                    $file_parts = pathinfo($file['path']);
+                        $file_parts = pathinfo($file['path']);
 
-                    if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
-                    
-                        $attachments[] = $file['path'];
-                    
-                    endif;
-
-                endforeach;
+                        if (!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) {
+                            $attachments[] = $file['path'];
+                        }
+                    }
+                }
                 
                 return $attachments;
 
@@ -144,19 +151,20 @@ class Invoice {
                     'link' => $invoice_url
                 ];
 
-                $files = $invoice_data['product_data']->files;
+                $files = is_array($invoice_data['product_data']->files) ? $invoice_data['product_data']->files : [];
+                $attachments = [];
 
-                foreach( (array) $files as $file ) :
+                if (!empty($files) && is_array($files)) {
+                    foreach ($files as $file) {
+                        if (!isset($file['path'])) continue;
 
-                    $file_parts = pathinfo($file['path']);
+                        $file_parts = pathinfo($file['path']);
 
-                    if(!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) :
-                    
-                        $attachments[] = $file['path'];
-                    
-                    endif;
-
-                endforeach;
+                        if (!in_array($file_parts['extension'], $this->blacklist_extension_for_email)) {
+                            $attachments[] = $file['path'];
+                        }
+                    }
+                }
                 
                 return $attachments;
 
